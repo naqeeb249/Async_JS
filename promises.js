@@ -16,7 +16,8 @@ function getPosts(){
     }, 2000 );
 }
 
- function createPost(post){
+
+  function createPost(post){
     return new Promise((resolve, reject)=> {
         setTimeout(() => {
             posts.push(post);
@@ -24,7 +25,7 @@ function getPosts(){
             const error = false;
 
             if(!error){
-            updateLastUserActivityTime();
+            
              resolve();
             }else{
                 reject('Something went wrong');
@@ -36,10 +37,10 @@ function getPosts(){
     }
 
     
-createPost({title:'Post three', body:'this is post three'}).then(getPosts);
 
 
-function deletePost(){
+
+ function deletePost(){
     return new Promise((resolve, reject)=>{
         setTimeout(()=>{
             posts.pop();
@@ -51,58 +52,23 @@ function deletePost(){
     });
 }
 
-// create and delete at same time
-/* function deleteP(){
-    return new Promise((resolve, reject) =>{
-        posts.pop();
-        if(posts.length === 0) reject('array is empty');
+// Using async await
 
-        else
-        resolve();
-
-    } );
-} */
-
-
-createPost({title:'Post four', body:'this is post four'}).then(getPosts).then(deletePost).then(getPosts);
-
-
-//createPost({title:'post five', body:'this is post five'}).then(getPosts).then(deleteP).then(getPosts);
-
-
-//promise.all
-
-const promise1 = Promise.resolve('Hello World');
-const promise2 = 10;
-const promise3 = new Promise((resolve, reject)=>{
-    setTimeout(resolve,2000,'Good Bye');
-});
-
-//Promise.all([promise1, promise2, promise3]).then(values => console.log(values))
-
-
-function updateLastUserActivityTime(){
-    return new Promise((resolve, reject) => {
-        
-        setTimeout(()=>{
-            resolve(`last updated at ${new Date().toLocaleString()}`);
-        },2000)
-    });
+ const postCreate = async()=> {
+   await createPost({title:'Post three', body:'this is post three'})
+   getPosts();
+  
 }
 
+postCreate(); 
 
-
- setTimeout(()=>
-{
-    console.log(posts);
-    updateLastUserActivityTime().then((message) => console.log(message));
-},2000) 
-
-
-
-setTimeout(()=>
-{
-    deletePost();
-    console.log(posts);
+const postCreateAnddelete = async()=>{
+    createPost({title:'Post four', body:'this is post four'});
+   getPosts();
+    await deletePost();
+  getPosts();
+      
     
-},2000) 
+}
+
+postCreateAnddelete();
